@@ -15,9 +15,14 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Action RPG"
-run/main_scene="res://World.tscn"
+config/name="action-rpg"
+run/main_scene="res://lobby/lobby.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+PlayerStats="*res://Scenes/PlayerStats.tscn"
+Server="*res://server/server.gd"
 
 [display]
 
@@ -92,6 +97,11 @@ roll={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":75,"unicode":0,"echo":false,"script":null)
  ]
 }
+shoot={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":76,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -100,6 +110,8 @@ roll={
 2d_physics/layer_3="PlayerHurtbox"
 2d_physics/layer_4="EnemyHurtbox"
 2d_physics/layer_5="Enemy"
+2d_physics/layer_6="SoftCollisions"
+2d_physics/layer_7="Shots"
 
 [rendering]
 

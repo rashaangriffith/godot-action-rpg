@@ -1,4 +1,9 @@
- extends KinematicBody2D
+extends KinematicBody2D
+
+signal shoot(shot, location, direction)
+
+const ShotScene = preload("res://Scenes/Shot.tscn")
+const PlayerHurtSoundScene = preload("res://Scenes/PlayerHurtSound.tscn")
 
 export var MAX_SPEED = 80
 export var ACCELERATION = 500
@@ -14,15 +19,21 @@ enum {
 var velocity = Vector2.ZERO
 var state = MOVE
 var roll_vector = Vector2.DOWN
+var stats = PlayerStats
+var input_vector = Vector2.ZERO
 
 onready var animationPlayer = $AnimationPlayer
+onready var blinkAnimationPlayer = $BlinkAnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 onready var swordHitbox = $HitboxPivot/SwordHitbox
+onready var hurtbox = $Hurtbox
 
 func _ready():
+	randomize() # get a different random seed on each play
 	animationTree.active = true
 	swordHitbox.knockback_vector = roll_vector
+	stats.connect("no_health", self, "queue_free")
 
 func _physics_process(delta):
 	match state:
@@ -34,7 +45,6 @@ func _physics_process(delta):
 			roll_state(delta)
 	
 func move_state(delta):
-	var input_vector = Vector2.ZERO
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	input_vector = input_vector.normalized()
@@ -57,9 +67,10 @@ func move_state(delta):
 	
 	if Input.is_action_just_pressed("roll"):
 		state = ROLL
-	
-	if Input.is_action_just_pressed("attack"):
+	elif Input.is_action_just_pressed("attack"):
 		state = ATTACK
+	elif Input.is_action_just_pressed("shoot"):
+		emit_signal("shoot", ShotScene, position, roll_vector)
 
 func roll_state(delta):
 	animationState.travel("Roll")
@@ -80,3 +91,14 @@ func roll_animation_finished():
 func attack_animation_finished():
 	state = MOVE
 
+func _on_Hurtbox_area_entered(area):
+	stats.health -= area.damage
+	hurtbox.create_hit_effect()
+	var playerHurtSound = PlayerHurtSoundScene.instance()
+	get_tree().current_scene.add_child(playerHurtSound)
+
+func _on_Hurtbox_invincibility_started():
+	blinkAnimationPlayer.play("Start")
+
+func _on_Hurtbox_invincibility_ended():
+	blinkAnimationPlayer.play("Stop")
