@@ -1,11 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://lobby/lobby.gd" type="Script" id=1]
+[ext_resource path="res://lobby/waiting_room.tscn" type="PackedScene" id=2]
 
 [node name="Lobby" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0235294, 0.0235294, 0.0235294, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -17,13 +26,103 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="JoinButton" type="Button" parent="CenterContainer"]
-margin_left = 121.0
-margin_top = 80.0
-margin_right = 198.0
-margin_bottom = 100.0
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 33.0
+margin_top = 12.0
+margin_right = 286.0
+margin_bottom = 167.0
+custom_constants/separation = 5
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+margin_right = 253.0
+margin_bottom = 14.0
+text = "LOBBY"
+align = 1
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/VBoxContainer"]
+margin_top = 19.0
+margin_right = 253.0
+margin_bottom = 130.0
+custom_constants/vseparation = 5
+custom_constants/hseparation = 15
+columns = 2
+
+[node name="NameLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_top = 5.0
+margin_right = 38.0
+margin_bottom = 19.0
+text = "Name"
+
+[node name="NameTextBox" type="LineEdit" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_left = 53.0
+margin_right = 253.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 200, 0 )
+text = "Enter Name"
+
+[node name="TeamLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_top = 34.0
+margin_right = 38.0
+margin_bottom = 48.0
+text = "Team"
+
+[node name="TeamTextBox" type="LineEdit" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_left = 53.0
+margin_top = 29.0
+margin_right = 253.0
+margin_bottom = 53.0
+rect_min_size = Vector2( 200, 0 )
+text = "1 or 2"
+
+[node name="IPLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_top = 63.0
+margin_right = 38.0
+margin_bottom = 77.0
+text = "IP"
+
+[node name="IPTextBox" type="LineEdit" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_left = 53.0
+margin_top = 58.0
+margin_right = 253.0
+margin_bottom = 82.0
+rect_min_size = Vector2( 200, 0 )
+text = "Enter IP Address"
+
+[node name="PortLabel" type="Label" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_top = 92.0
+margin_right = 38.0
+margin_bottom = 106.0
+text = "Port"
+
+[node name="PortTextBox" type="LineEdit" parent="CenterContainer/VBoxContainer/GridContainer"]
+margin_left = 53.0
+margin_top = 87.0
+margin_right = 253.0
+margin_bottom = 111.0
+rect_min_size = Vector2( 200, 0 )
+text = "Enter Port Number"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 135.0
+margin_right = 253.0
+margin_bottom = 155.0
 text = "Join Game"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="pressed" from="CenterContainer/JoinButton" to="." method="_on_JoinButton_pressed"]
+
+[node name="WaitingRoom" parent="." instance=ExtResource( 2 )]
+
+[node name="VBoxContainer" parent="WaitingRoom/CenterContainer" index="0"]
+margin_top = 69.0
+margin_bottom = 111.0
+
+[node name="ItemList" parent="WaitingRoom/CenterContainer/VBoxContainer" index="1"]
+items = [ "Player 1", null, false, "Player 2", null, false, "Player 3", null, false, "Player 4", null, false ]
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/GridContainer/NameTextBox" to="." method="_on_NameTextBox_text_changed"]
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/GridContainer/TeamTextBox" to="." method="_on_TeamTextBox_text_changed"]
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/GridContainer/PortTextBox" to="." method="_on_PortTextBox_text_changed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_JoinButton_pressed"]
+[connection signal="pressed" from="WaitingRoom/CenterContainer/VBoxContainer/ReadyButton" to="." method="_on_ReadyButton_pressed"]
+
+[editable path="WaitingRoom"]

@@ -21,9 +21,11 @@ func start_invincibility(duration):
 	self.is_invincible = true
 
 func create_hit_effect():
+	print("hitbox create_hit_effect for: " + PlayerStats.get_player_data(get_parent().player_id, "Player_name"))
 	var hitEffect = HitEffectScene.instance()
-	var main = get_tree().current_scene
-	main.add_child(hitEffect)
+	#var main = get_tree().current_scene
+	#main.add_child(hitEffect)
+	get_parent().add_child(hitEffect)
 	hitEffect.global_position = global_position
 	hitEffect.offset = hitEffectOffset
 	start_invincibility(0.8)

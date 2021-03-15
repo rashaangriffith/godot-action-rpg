@@ -5,7 +5,7 @@ const DEFAULT_PORT: int = 9000
 
 var network = NetworkedMultiplayerENet.new()
 var selected_ip: String = ""
-var selected_port: String = ""
+var selected_port: int = 0
 
 var local_player_id: int = 0
 sync var players = {}
@@ -19,7 +19,7 @@ func _ready():
 
 func _connect_to_server():
 	get_tree().connect("connected_to_server", self, "_connected_ok")
-	network.create_client(DEFAULT_IP, DEFAULT_PORT)
+	network.create_client(selected_ip, selected_port)
 	get_tree().set_network_peer(network)
 
 func _player_connected(id):
@@ -30,9 +30,27 @@ func _player_disconnected(id):
 	
 func _connected_ok():
 	print("Successfully Connected")
+	register_player()
+	rpc_id(1, "send_player_info", local_player_id, player_data)
 	
 func _connected_fail():
 	print("Connection Failed")
 	
 func _server_disconnected():
 	print("Server Disconnected")
+
+func register_player():
+	local_player_id = get_tree().get_network_unique_id()
+	player_data = Save.save_data
+	players[local_player_id] = player_data
+
+sync func update_waiting_room():
+	get_tree().call_group("WaitingRoom", "refresh_players", players)
+	
+func load_game():
+	rpc_id(1, "load_world")
+	
+sync func start_game():
+	var world = preload("res://world/world.tscn").instance()
+	get_tree().get_root().add_child(world)
+	get_tree().get_root().get_node("Lobby").queue_free()

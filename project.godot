@@ -21,6 +21,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
+Save="*res://save/save.gd"
 PlayerStats="*res://Scenes/PlayerStats.tscn"
 Server="*res://server/server.gd"
 
