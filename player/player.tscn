@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=61 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://Player Assets/Player.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Music and Sounds/Swipe.wav" type="AudioStream" id=7]
 [ext_resource path="res://Music and Sounds/Evade.wav" type="AudioStream" id=8]
 [ext_resource path="res://Shaders/WhiteColor.shader" type="Shader" id=9]
+[ext_resource path="res://fonts/bit_font.tres" type="DynamicFont" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
 resource_local_to_scene = true
@@ -835,7 +836,9 @@ margin_left = -24.0
 margin_top = -32.0
 margin_right = 22.0
 margin_bottom = -18.0
+custom_fonts/font = ExtResource( 10 )
 align = 1
+uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

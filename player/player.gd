@@ -9,7 +9,7 @@ export var MAX_SPEED = 80
 export var ACCELERATION = 500
 export var FRICTION = 500
 export var ROLL_SPEED = 125
-export var MAX_HEALTH = 10
+export var MAX_HEALTH = 5
 
 enum PLAYER_STATES {
 	MOVE,
@@ -23,7 +23,7 @@ var state = PLAYER_STATES.MOVE
 var roll_vector = Vector2.DOWN
 var stats = PlayerStats
 var input_vector = Vector2.ZERO
-var physics_delta = 0
+var spawn_position = Vector2.ZERO
 
 onready var animationPlayer = $AnimationPlayer
 onready var blinkAnimationPlayer = $BlinkAnimationPlayer
@@ -40,15 +40,11 @@ func _ready():
 	swordHitbox.player_id = player_id
 	swordHitbox.knockback_vector = roll_vector
 	PlayerStats.set_player_max_health(player_id, MAX_HEALTH)
-	#stats.connect("no_health", self, "queue_free")
+	stats.connect("no_health", self, "_on_PlayerStats_no_health")
 	#name_label.set_as_toplevel(true)
 	set_name_label()
-	
-	#var world_objects = get_parent().get_parent()
-	#world_objects.connect("shoot", world_objects, "_on_Player_shoot")
 
 func _physics_process(delta):
-	physics_delta = delta
 	if is_network_master():
 		camera.current = true
 		get_input()
@@ -77,9 +73,10 @@ remote func update_remote_player(data):
 		
 func set_name_label():
 	var player_name = PlayerStats.get_player_data(player_id, "Player_name")
-	var team = PlayerStats.get_player_data(player_id, "Team")
-	var health = PlayerStats.get_player_data(player_id, "Health")
-	name_label.text = player_name + " (Team: " + team + ") (Health: " + str(health) + ")"
+	name_label.text = player_name
+#	var team = PlayerStats.get_player_data(player_id, "Team")
+#	var health = PlayerStats.get_player_data(player_id, "Health")
+#	name_label.text = player_name + " (Team: " + team + ") (Health: " + str(health) + ")"
 	
 func get_input():
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -133,6 +130,10 @@ func roll_animation_finished():
 	
 func attack_animation_finished():
 	state = PLAYER_STATES.MOVE
+	
+func die():
+	position = spawn_position
+	PlayerStats.reset_player_health(player_id)
 
 func _on_Hurtbox_area_entered(area):
 #	print("-----------player onHurtbox entered")
@@ -156,3 +157,7 @@ func _on_Hurtbox_invincibility_started():
 
 func _on_Hurtbox_invincibility_ended():
 	blinkAnimationPlayer.play("Stop")
+
+func _on_PlayerStats_no_health(id):
+	if player_id == id:
+		die()
