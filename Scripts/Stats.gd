@@ -1,5 +1,8 @@
 extends Node
 
+const TEAM1 = "1"
+const TEAM2 = "2"
+
 signal no_health
 signal health_changed(value)
 signal max_health_changed(value)

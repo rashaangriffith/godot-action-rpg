@@ -5,7 +5,7 @@ var max_hearts = 4 setget set_max_hearts
 
 onready var heartUIFull = $HeartUIFull
 onready var heartUIEmpty = $HeartUIEmpty
-onready var teamLabel = $TeamLabel
+onready var nameLabel = $NameLabel
 
 func set_hearts(value):
 	hearts = clamp(value, 0 , max_hearts)
@@ -13,7 +13,7 @@ func set_hearts(value):
 		heartUIFull.rect_size.x = hearts * 15
 	
 	# this needs to be moved somewhere else
-	teamLabel.text = "Team: " + PlayerStats.get_player_data(Server.local_player_id, "Team")
+	nameLabel.text = PlayerStats.get_player_data(Server.local_player_id, "Player_name")
 	
 func set_max_hearts(value):
 	max_hearts = max(value, 1)

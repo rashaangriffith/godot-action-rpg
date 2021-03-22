@@ -24,6 +24,7 @@ config/icon="res://icon.png"
 Save="*res://save/save.gd"
 PlayerStats="*res://Scenes/PlayerStats.tscn"
 Server="*res://server/server.gd"
+ObjectiveState="*res://objective/objective_state.gd"
 
 [display]
 

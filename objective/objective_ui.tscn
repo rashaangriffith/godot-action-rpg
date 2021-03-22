@@ -1,0 +1,92 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fonts/bit_font_8.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/bit_font_16.tres" type="DynamicFont" id=2]
+[ext_resource path="res://objective/objective_ui.gd" type="Script" id=3]
+[ext_resource path="res://fonts/bit_font_6.tres" type="DynamicFont" id=4]
+
+[node name="ObjectiveUI" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Line2D" parent="."]
+position = Vector2( 0, 11 )
+points = PoolVector2Array( 100, 0, 0, 0 )
+width = 22.0
+default_color = Color( 0, 0, 0, 0.196078 )
+
+[node name="Team1Percentage" type="Label" parent="."]
+margin_left = 18.8163
+margin_top = 1.82806
+margin_right = 38.8163
+margin_bottom = 11.828
+custom_fonts/font = ExtResource( 1 )
+text = "0%"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Team2Percentage" type="Label" parent="."]
+margin_left = 61.1101
+margin_top = 1.71007
+margin_right = 81.1101
+margin_bottom = 11.71
+custom_fonts/font = ExtResource( 1 )
+text = "0%"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Team1Score" type="Label" parent="."]
+margin_left = 2.2973
+margin_top = -0.21619
+margin_right = 16.2973
+margin_bottom = 14.7838
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Team2Score" type="Label" parent="."]
+margin_left = 83.9202
+margin_top = -0.0539601
+margin_right = 97.9202
+margin_bottom = 14.946
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Status" type="Label" parent="."]
+margin_top = 15.0
+margin_right = 100.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 4 )
+text = "OPEN"
+align = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CapturedTeam" type="Label" parent="."]
+margin_left = 35.0
+margin_top = 2.0
+margin_right = 65.0
+margin_bottom = 12.0
+custom_fonts/font = ExtResource( 1 )
+align = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
