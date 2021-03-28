@@ -43,6 +43,7 @@ func _ready():
 	stats.connect("no_health", self, "_on_PlayerStats_no_health")
 	#name_label.set_as_toplevel(true)
 	set_name_label()
+	GameManager.connect("round_started", self, "_on_GameManager_start_round")
 
 func _physics_process(delta):
 	if is_network_master():
@@ -133,7 +134,11 @@ func attack_animation_finished():
 	
 func die():
 	position = spawn_position
-	PlayerStats.reset_player_health(player_id)
+	PlayerStats.reset_player(player_id)
+
+func start_round():
+	position = spawn_position
+	PlayerStats.reset_player(player_id)
 
 func _on_Hurtbox_area_entered(area):
 #	print("-----------player onHurtbox entered")
@@ -161,3 +166,6 @@ func _on_Hurtbox_invincibility_ended():
 func _on_PlayerStats_no_health(id):
 	if player_id == id:
 		die()
+		
+func _on_GameManager_start_round(current_round):
+	start_round()

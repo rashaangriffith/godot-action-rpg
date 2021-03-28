@@ -30,7 +30,7 @@ func player_take_damage(player_id, value):
 	var new_health = Server.players[int(player_id)]["Health"] - value
 	set_player_health(player_id, new_health)
 
-func reset_player_health(player_id):
+func reset_player(player_id):
 	var new_health = Server.players[int(player_id)]["MaxHealth"]
 	set_player_health(player_id, new_health)
 		

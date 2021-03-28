@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=63 format=2]
 
 [ext_resource path="res://world/gamestate.gd" type="Script" id=1]
 [ext_resource path="res://objective/objective.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://World Assets/CliffTileset.png" type="Texture" id=9]
 [ext_resource path="res://world/world_objects.gd" type="Script" id=10]
 [ext_resource path="res://World Assets/GrassBackground.png" type="Texture" id=11]
+[ext_resource path="res://game/game_messenger.tscn" type="PackedScene" id=13]
 
 [sub_resource type="TileSet" id=1]
 0/name = "DirtTileset.png 0"
@@ -516,9 +517,6 @@ script = ExtResource( 10 )
 
 [node name="Players" type="Node" parent="WorldObjects"]
 
-[node name="PlayerSpawn" type="Position2D" parent="WorldObjects"]
-position = Vector2( 120, 60 )
-
 [node name="Team1Spawns" type="Node" parent="WorldObjects"]
 
 [node name="Player1" type="Position2D" parent="WorldObjects/Team1Spawns"]
@@ -546,6 +544,20 @@ position = Vector2( 704, 192 )
 
 [node name="Player4" type="Position2D" parent="WorldObjects/Team2Spawns"]
 position = Vector2( 608, 192 )
+
+[node name="SpawnDoors" type="Node" parent="WorldObjects"]
+
+[node name="Bush" parent="WorldObjects/SpawnDoors" instance=ExtResource( 6 )]
+position = Vector2( -240, 131 )
+
+[node name="Bush2" parent="WorldObjects/SpawnDoors" instance=ExtResource( 6 )]
+position = Vector2( -240, 148.261 )
+
+[node name="Bush3" parent="WorldObjects/SpawnDoors" instance=ExtResource( 6 )]
+position = Vector2( 559.405, 104 )
+
+[node name="Bush4" parent="WorldObjects/SpawnDoors" instance=ExtResource( 6 )]
+position = Vector2( 559.405, 120 )
 
 [node name="Enemies" type="Node" parent="WorldObjects"]
 
@@ -654,8 +666,20 @@ margin_left = 107.135
 margin_top = 5.7741
 margin_right = 147.135
 margin_bottom = 45.7741
+
+[node name="GameMessenger" parent="CanvasLayer" instance=ExtResource( 13 )]
+
+[node name="SmallLabel" parent="CanvasLayer/GameMessenger" index="2"]
+margin_top = 27.7741
+margin_bottom = 36.7741
+
+[node name="SmallCountdown" parent="CanvasLayer/GameMessenger" index="3"]
+margin_top = 36.7741
+margin_bottom = 45.7741
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
 
 [editable path="WorldObjects/Objective"]
 
 [editable path="CanvasLayer/HealthUI"]
+
+[editable path="CanvasLayer/GameMessenger"]

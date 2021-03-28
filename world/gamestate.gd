@@ -12,8 +12,11 @@ onready var enemies = $WorldObjects/Enemies
 
 onready var team_1_spawns = $WorldObjects/Team1Spawns
 onready var team_2_spawns = $WorldObjects/Team2Spawns
+onready var spawn_doors = $WorldObjects/SpawnDoors
 
 func _ready():
+	GameManager.connect("round_game_started", self, "_on_GameManager_round_game_started")
+	GameManager.connect("round_game_ended", self, "_on_GameManager_round_game_ended")
 	possible_enemy_destinations = enemy_destinations.get_children()
 	rpc_id(1, "spawn_players", Server.local_player_id)
 	
@@ -45,3 +48,9 @@ func _on_EnemySpawnTimer_timeout():
 	pass
 	# don't spawn enemies for now
 	#rpc_id(1, "spawn_enemies")
+
+func _on_GameManager_round_game_started():
+	$WorldObjects.remove_child(spawn_doors)
+
+func _on_GameManager_round_game_ended():
+	$WorldObjects.add_child(spawn_doors)

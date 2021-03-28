@@ -54,3 +54,4 @@ sync func start_game():
 	var world = preload("res://world/world.tscn").instance()
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("Lobby").queue_free()
+	GameManager.start_round()

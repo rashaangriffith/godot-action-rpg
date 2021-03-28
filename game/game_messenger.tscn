@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://fonts/bit_font_6.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/bit_font_16.tres" type="DynamicFont" id=2]
+[ext_resource path="res://game/game_messenger.gd" type="Script" id=3]
+
+[node name="GameMessenger" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BigLabel" type="Label" parent="."]
+margin_left = 40.0
+margin_top = 70.0
+margin_right = 270.0
+margin_bottom = 86.0
+custom_fonts/font = ExtResource( 2 )
+text = "TEAM 1 WINS RD 1. NEXT IN"
+align = 1
+valign = 1
+uppercase = true
+
+[node name="BigCountdown" type="Label" parent="."]
+margin_left = 40.0
+margin_top = 90.0
+margin_right = 270.0
+margin_bottom = 104.0
+custom_fonts/font = ExtResource( 2 )
+text = "5"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SmallLabel" type="Label" parent="."]
+margin_left = 40.0
+margin_right = 270.0
+margin_bottom = 9.0
+custom_fonts/font = ExtResource( 1 )
+text = "ROUND 1 STARTS IN"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SmallCountdown" type="Label" parent="."]
+margin_left = 40.0
+margin_top = 9.0
+margin_right = 270.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 1 )
+text = "5"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
