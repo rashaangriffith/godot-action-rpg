@@ -758,6 +758,7 @@ height = 4.4946
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
 script = ExtResource( 1 )
+MAX_HEALTH = 4
 
 [node name="ShadowSprite" type="Sprite" parent="."]
 position = Vector2( 0, 1 )
@@ -842,9 +843,18 @@ uppercase = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ReloadTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="APRegenTimer" type="Timer" parent="."]
+wait_time = 3.0
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_ended"]
 [connection signal="invincibility_started" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_started"]
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
+[connection signal="timeout" from="APRegenTimer" to="." method="_on_APRegenTimer_timeout"]
 
 [editable path="HitboxPivot/SwordHitbox"]
 

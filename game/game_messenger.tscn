@@ -38,6 +38,7 @@ __meta__ = {
 }
 
 [node name="SmallLabel" type="Label" parent="."]
+visible = false
 margin_left = 40.0
 margin_right = 270.0
 margin_bottom = 9.0
@@ -51,6 +52,7 @@ __meta__ = {
 }
 
 [node name="SmallCountdown" type="Label" parent="."]
+visible = false
 margin_left = 40.0
 margin_top = 9.0
 margin_right = 270.0

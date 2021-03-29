@@ -6,6 +6,10 @@ const TEAM2 = "2"
 signal no_health
 signal health_changed(value)
 signal max_health_changed(value)
+signal ammo_count_changed(remaining, maximum)
+signal ap_count_changed(remaining, maximum)
+signal ability_1_disabled(value)
+signal ability_2_disabled(value)
 
 #func _ready():
 	#self.health = max_health
@@ -42,3 +46,16 @@ func set_player_data(player_id, data_key, data_value):
 
 func is_same_team(player_id_1, player_id_2):
 	return Server.players[int(player_id_1)]["Team"] == Server.players[int(player_id_2)]["Team"]
+	
+func set_ammo_count(remaining, maximum):
+	emit_signal("ammo_count_changed", remaining, maximum)
+	
+func set_ap_count(value):
+	emit_signal("ap_count_changed", value)
+
+func set_ability_1_disabled(value):
+	print("set ability 1 disabled: " + str(value))
+	emit_signal("ability_1_disabled", value)
+
+func set_ability_2_disabled(value):
+	emit_signal("ability_2_disabled", value)

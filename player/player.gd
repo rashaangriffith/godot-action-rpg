@@ -2,28 +2,14 @@ extends KinematicBody2D
 
 signal shoot(shot, location, direction)
 
-const ShotScene = preload("res://Scenes/Shot.tscn")
-const PlayerHurtSoundScene = preload("res://Scenes/PlayerHurtSound.tscn")
-
-export var MAX_SPEED = 80
-export var ACCELERATION = 500
-export var FRICTION = 500
-export var ROLL_SPEED = 125
-export var MAX_HEALTH = 5
-
 enum PLAYER_STATES {
 	MOVE,
 	ROLL,
 	ATTACK
 }
 
-var player_id = 0
-var velocity = Vector2.ZERO
-var state = PLAYER_STATES.MOVE
-var roll_vector = Vector2.DOWN
-var stats = PlayerStats
-var input_vector = Vector2.ZERO
-var spawn_position = Vector2.ZERO
+const ShotScene = preload("res://Scenes/Shot.tscn")
+const PlayerHurtSoundScene = preload("res://Scenes/PlayerHurtSound.tscn")
 
 onready var animationPlayer = $AnimationPlayer
 onready var blinkAnimationPlayer = $BlinkAnimationPlayer
@@ -33,6 +19,33 @@ onready var swordHitbox = $HitboxPivot/SwordHitbox
 onready var hurtbox = $Hurtbox
 onready var name_label = $NameLabel
 onready var camera = $Camera2D
+onready var reload_timer = $ReloadTimer
+onready var ap_regen_timer = $APRegenTimer
+
+export var MAX_SPEED = 80
+export var ACCELERATION = 500
+export var FRICTION = 500
+export var ROLL_SPEED = 125
+export var MAX_HEALTH = 5
+export var MAX_AMMO = 10
+export var MAX_AP = 4
+
+var player_id = 0
+var velocity = Vector2.ZERO
+var state = PLAYER_STATES.MOVE
+var roll_vector = Vector2.DOWN
+var stats = PlayerStats
+var input_vector = Vector2.ZERO
+var spawn_position = Vector2.ZERO
+var remaining_ammo = MAX_AMMO
+var is_reloading = false
+var ability_1 = {
+	"cost": 2
+}
+var ability_2 = {
+	"cost": 3
+}
+var remaining_ap = MAX_AP
 
 func _ready():
 	randomize() # get a different random seed on each play
@@ -44,6 +57,8 @@ func _ready():
 	#name_label.set_as_toplevel(true)
 	set_name_label()
 	GameManager.connect("round_started", self, "_on_GameManager_start_round")
+	set_remaining_ammo_count(remaining_ammo)
+	set_remaining_ap_count(remaining_ap)
 
 func _physics_process(delta):
 	if is_network_master():
@@ -75,26 +90,42 @@ remote func update_remote_player(data):
 func set_name_label():
 	var player_name = PlayerStats.get_player_data(player_id, "Player_name")
 	name_label.text = player_name
-#	var team = PlayerStats.get_player_data(player_id, "Team")
-#	var health = PlayerStats.get_player_data(player_id, "Health")
-#	name_label.text = player_name + " (Team: " + team + ") (Health: " + str(health) + ")"
 	
 func get_input():
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	input_vector = input_vector.normalized()
 	
-	if Input.is_action_just_pressed("roll"):
-		print("input roll")
-		state = PLAYER_STATES.ROLL
-	elif Input.is_action_just_pressed("attack"):
-		print(PlayerStats.get_player_data(player_id, "Player_name") + " has attacked")
-		state = PLAYER_STATES.ATTACK
-	elif Input.is_action_just_pressed("shoot"):
-		print("input shoot")
+	if Input.is_action_just_pressed("primary_attack"):
+#		print("input attack: shoot")
 		#emit_signal("shoot", ShotScene, position, roll_vector)
-		var world_objects = get_parent().get_parent()
-		world_objects._on_Player_shoot(ShotScene, position, roll_vector, player_id)
+		# won't need this strange world_objects reference once input_manager singleton is implemented
+		if is_reloading:
+			return
+			
+		if remaining_ammo > 0:
+			var world_objects = get_parent().get_parent()
+			world_objects._on_Player_shoot(ShotScene, position, roll_vector, player_id)
+			set_remaining_ammo_count(remaining_ammo - 1)
+		else:
+			reload()
+	elif Input.is_action_just_pressed("ability_1"):
+#		print(PlayerStats.get_player_data(player_id, "Player_name") + " has attacked")
+		if remaining_ap >= ability_1.cost:
+			state = PLAYER_STATES.ATTACK
+			set_remaining_ap_count(remaining_ap - ability_1.cost)
+			if ap_regen_timer.is_stopped():
+				ap_regen_timer.start()
+	elif Input.is_action_just_pressed("ability_2"):
+#		print("input ability_2: roll")
+		if remaining_ap >= ability_2.cost:
+			state = PLAYER_STATES.ROLL
+			set_remaining_ap_count(remaining_ap - ability_2.cost)
+			if ap_regen_timer.is_stopped():
+				ap_regen_timer.start()
+	elif Input.is_action_just_pressed("reload"):
+		if not is_reloading and remaining_ammo < MAX_AMMO:
+			reload()
 	
 func move_state(delta):
 	if (input_vector != Vector2.ZERO):
@@ -131,14 +162,43 @@ func roll_animation_finished():
 	
 func attack_animation_finished():
 	state = PLAYER_STATES.MOVE
+
+func reset_player():
+	position = spawn_position
+	set_remaining_ammo_count(MAX_AMMO)
+	set_remaining_ap_count(MAX_AP)
+	PlayerStats.reset_player(player_id)
 	
 func die():
-	position = spawn_position
-	PlayerStats.reset_player(player_id)
+	reset_player()
 
 func start_round():
-	position = spawn_position
-	PlayerStats.reset_player(player_id)
+	reset_player()
+
+func set_remaining_ammo_count(value):
+	remaining_ammo = clamp(value, 0, MAX_AMMO)
+	PlayerStats.set_ammo_count(remaining_ammo, MAX_AMMO)
+
+func set_remaining_ap_count(value):
+	remaining_ap = clamp(value, 0, MAX_AP)
+	if value >= MAX_AP:
+		ap_regen_timer.stop()
+	PlayerStats.set_ap_count(remaining_ap)
+	
+	if ability_1.cost <= remaining_ap:
+		PlayerStats.set_ability_1_disabled(false)
+	else:
+		PlayerStats.set_ability_1_disabled(true)
+	
+	if ability_2.cost <= remaining_ap:
+		PlayerStats.set_ability_2_disabled(false)
+	else:
+		PlayerStats.set_ability_2_disabled(true)
+
+func reload():
+	print(PlayerStats.get_player_data(player_id, "Player_name") + " is reloading primary weapon...")
+	reload_timer.start()
+	is_reloading = true
 
 func _on_Hurtbox_area_entered(area):
 #	print("-----------player onHurtbox entered")
@@ -169,3 +229,11 @@ func _on_PlayerStats_no_health(id):
 		
 func _on_GameManager_start_round(current_round):
 	start_round()
+
+func _on_ReloadTimer_timeout():
+	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s primary weapon is reloaded")
+	set_remaining_ammo_count(MAX_AMMO)
+	is_reloading = false
+
+func _on_APRegenTimer_timeout():
+	set_remaining_ap_count(remaining_ap + 1)

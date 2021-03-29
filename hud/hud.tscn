@@ -1,0 +1,147 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://hud/hud.gd" type="Script" id=1]
+[ext_resource path="res://UI/HeartUIFull.png" type="Texture" id=2]
+[ext_resource path="res://UI/HeartUIEmpty.png" type="Texture" id=3]
+[ext_resource path="res://fonts/bit_font_8.tres" type="DynamicFont" id=4]
+[ext_resource path="res://UI/ap.png" type="Texture" id=5]
+[ext_resource path="res://fonts/bit_font_6.tres" type="DynamicFont" id=6]
+[ext_resource path="res://UI/ability_2.png" type="Texture" id=7]
+[ext_resource path="res://UI/ability_1.png" type="Texture" id=8]
+
+[node name="HealthUI" type="Control"]
+margin_right = 60.0
+margin_bottom = 11.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Line2D" parent="."]
+position = Vector2( 0, 20.0058 )
+points = PoolVector2Array( 105.242, 0.021759, 0, 0 )
+width = 40.0
+default_color = Color( 0, 0, 0, 0.196078 )
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+visible = false
+color = Color( 0, 0, 0, 0.156863 )
+polygon = PoolVector2Array( -0.691952, -1.03876, 63.6704, -0.244164, 63.6704, 22.2694, -0.427086, 22.5343 )
+
+[node name="HeartUIEmpty" type="TextureRect" parent="."]
+margin_left = 1.58919
+margin_top = 1.58919
+margin_right = 61.5892
+margin_bottom = 12.5892
+texture = ExtResource( 3 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeartUIFull" type="TextureRect" parent="."]
+margin_left = 1.58919
+margin_top = 1.58919
+margin_right = 61.5892
+margin_bottom = 12.5892
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AbilityPointsEmpty" type="TextureRect" parent="."]
+self_modulate = Color( 0.137255, 0.101961, 0.101961, 1 )
+margin_top = 14.0
+margin_right = 63.0
+margin_bottom = 30.0
+texture = ExtResource( 5 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AbilityPointsFull" type="TextureRect" parent="."]
+margin_top = 14.0
+margin_right = 63.0
+margin_bottom = 30.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = 1.0
+margin_top = 31.0
+margin_right = 62.0
+margin_bottom = 40.0
+custom_fonts/font = ExtResource( 4 )
+text = "NAME"
+clip_text = true
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AmmoCount" type="Label" parent="."]
+margin_left = 65.0356
+margin_top = 0.222725
+margin_right = 105.036
+margin_bottom = 14.2227
+custom_fonts/font = ExtResource( 4 )
+text = "120/120"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Divider" type="Line2D" parent="."]
+position = Vector2( 0, 4.26189 )
+points = PoolVector2Array( 64, 0, 64, 32 )
+width = 1.0
+default_color = Color( 0.196078, 0.196078, 0.196078, 1 )
+
+[node name="Ability1Disabled" type="Sprite" parent="."]
+modulate = Color( 0.156863, 0.117647, 0.117647, 1 )
+position = Vector2( 77.4567, 21.55 )
+texture = ExtResource( 8 )
+
+[node name="Ability1" type="Sprite" parent="."]
+position = Vector2( 77.4567, 21.55 )
+texture = ExtResource( 8 )
+
+[node name="Ability1APCount" type="Label" parent="."]
+margin_left = 65.5924
+margin_top = 12.2499
+margin_right = 69.5924
+margin_bottom = 19.2499
+custom_fonts/font = ExtResource( 6 )
+text = "2"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ability2Disabled" type="Sprite" parent="."]
+modulate = Color( 0.156863, 0.117647, 0.117647, 1 )
+position = Vector2( 97.1136, 21.9955 )
+texture = ExtResource( 7 )
+
+[node name="Ability2" type="Sprite" parent="."]
+position = Vector2( 97.1136, 21.9955 )
+texture = ExtResource( 7 )
+
+[node name="Ability2APCount" type="Label" parent="."]
+margin_left = 87.3081
+margin_top = 12.1362
+margin_right = 91.3081
+margin_bottom = 19.1362
+custom_fonts/font = ExtResource( 6 )
+text = "3"
+__meta__ = {
+"_edit_use_anchors_": false
+}

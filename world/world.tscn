@@ -4,7 +4,7 @@
 [ext_resource path="res://objective/objective.tscn" type="PackedScene" id=2]
 [ext_resource path="res://objective/objective_ui.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Tree.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scenes/HealthUI.tscn" type="PackedScene" id=5]
+[ext_resource path="res://hud/hud.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scenes/Bush.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Scenes/Grass.tscn" type="PackedScene" id=7]
 [ext_resource path="res://World Assets/DirtTileset.png" type="Texture" id=8]
@@ -655,18 +655,6 @@ shape = SubResource( 50 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="HealthUI" parent="CanvasLayer" instance=ExtResource( 5 )]
-margin_left = 8.0
-margin_top = 152.101
-margin_right = 68.0
-margin_bottom = 163.101
-
-[node name="ObjectiveUI" parent="CanvasLayer" instance=ExtResource( 3 )]
-margin_left = 107.135
-margin_top = 5.7741
-margin_right = 147.135
-margin_bottom = 45.7741
-
 [node name="GameMessenger" parent="CanvasLayer" instance=ExtResource( 13 )]
 
 [node name="SmallLabel" parent="CanvasLayer/GameMessenger" index="2"]
@@ -676,10 +664,20 @@ margin_bottom = 36.7741
 [node name="SmallCountdown" parent="CanvasLayer/GameMessenger" index="3"]
 margin_top = 36.7741
 margin_bottom = 45.7741
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource( 5 )]
+margin_left = 3.0
+margin_top = 137.101
+margin_right = 63.0
+margin_bottom = 148.101
+
+[node name="ObjectiveUI" parent="CanvasLayer" instance=ExtResource( 3 )]
+margin_left = 107.135
+margin_top = 5.7741
+margin_right = 147.135
+margin_bottom = 45.7741
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
 
 [editable path="WorldObjects/Objective"]
-
-[editable path="CanvasLayer/HealthUI"]
 
 [editable path="CanvasLayer/GameMessenger"]
