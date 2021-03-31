@@ -145,3 +145,13 @@ text = "3"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="SuperMeter" type="ProgressBar" parent="."]
+margin_left = 66.1669
+margin_top = 31.4927
+margin_right = 103.167
+margin_bottom = 38.4927
+custom_fonts/font = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

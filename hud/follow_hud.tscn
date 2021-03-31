@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://fonts/bit_font_8.tres" type="DynamicFont" id=1]
+[ext_resource path="res://UI/HeartUIEmpty.png" type="Texture" id=2]
+[ext_resource path="res://UI/HeartUIFull.png" type="Texture" id=3]
+
+[node name="FollowHud" type="Node"]
+
+[node name="NameLabel" type="Label" parent="."]
+margin_left = -23.0
+margin_top = -34.0
+margin_right = 23.0
+margin_bottom = -26.0
+custom_fonts/font = ExtResource( 1 )
+text = "NAME"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeathEmpty" type="TextureRect" parent="."]
+margin_left = -8.90924
+margin_top = -24.7873
+margin_right = 50.0908
+margin_bottom = -13.7873
+rect_scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 2 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HeathFull" type="TextureRect" parent="."]
+margin_left = -8.90924
+margin_top = -24.7873
+margin_right = 50.0908
+margin_bottom = -13.7873
+rect_scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 3 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

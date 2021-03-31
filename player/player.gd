@@ -8,8 +8,14 @@ enum PLAYER_STATES {
 	ATTACK
 }
 
+enum SUPER_TYPES {
+	SPEED_UP
+}
+
 const ShotScene = preload("res://Scenes/Shot.tscn")
 const PlayerHurtSoundScene = preload("res://Scenes/PlayerHurtSound.tscn")
+const white_color_material = preload("res://materials/white_color_shadermaterial.tres")
+const red_outline_material = preload("res://materials/red_outline_shadermaterial.tres")
 
 onready var animationPlayer = $AnimationPlayer
 onready var blinkAnimationPlayer = $BlinkAnimationPlayer
@@ -17,10 +23,13 @@ onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 onready var swordHitbox = $HitboxPivot/SwordHitbox
 onready var hurtbox = $Hurtbox
-onready var name_label = $NameLabel
+onready var follow_hud = $FollowHud
 onready var camera = $Camera2D
 onready var reload_timer = $ReloadTimer
 onready var ap_regen_timer = $APRegenTimer
+onready var super_charge_timer = $SuperChargeTimer
+onready var super_duration_timer = $SuperDurationTimer
+onready var sprite = $Sprite
 
 export var MAX_SPEED = 80
 export var ACCELERATION = 500
@@ -29,6 +38,8 @@ export var ROLL_SPEED = 125
 export var MAX_HEALTH = 5
 export var MAX_AMMO = 10
 export var MAX_AP = 4
+export var MAX_SUPER = 100
+export var SUPER_CHARGE_RATE = 20
 
 var player_id = 0
 var velocity = Vector2.ZERO
@@ -46,6 +57,11 @@ var ability_2 = {
 	"cost": 3
 }
 var remaining_ap = MAX_AP
+var super = {
+	"type": SUPER_TYPES.SPEED_UP,
+	"duration": 5
+}
+var super_meter_count = 0
 
 func _ready():
 	randomize() # get a different random seed on each play
@@ -57,8 +73,13 @@ func _ready():
 	#name_label.set_as_toplevel(true)
 	set_name_label()
 	GameManager.connect("round_started", self, "_on_GameManager_start_round")
+	GameManager.connect("round_game_started", self, "_on_GameManager_start_round_game")
 	set_remaining_ammo_count(remaining_ammo)
 	set_remaining_ap_count(remaining_ap)
+	follow_hud.player_id = player_id
+	
+	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
+		sprite.material = red_outline_material
 
 func _physics_process(delta):
 	if is_network_master():
@@ -89,7 +110,7 @@ remote func update_remote_player(data):
 		
 func set_name_label():
 	var player_name = PlayerStats.get_player_data(player_id, "Player_name")
-	name_label.text = player_name
+	follow_hud.set_name_label(player_name, player_id)
 	
 func get_input():
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -126,6 +147,10 @@ func get_input():
 	elif Input.is_action_just_pressed("reload"):
 		if not is_reloading and remaining_ammo < MAX_AMMO:
 			reload()
+	elif Input.is_action_just_pressed("super"):
+		print("super meter count: " + str(super_meter_count) + " | max: " + str(MAX_SUPER))
+		if super_meter_count == MAX_SUPER:
+			activate_super()
 	
 func move_state(delta):
 	if (input_vector != Vector2.ZERO):
@@ -167,7 +192,9 @@ func reset_player():
 	position = spawn_position
 	set_remaining_ammo_count(MAX_AMMO)
 	set_remaining_ap_count(MAX_AP)
+	set_super_meter_count(0)
 	PlayerStats.reset_player(player_id)
+	super_charge_timer.stop()
 	
 func die():
 	reset_player()
@@ -195,10 +222,30 @@ func set_remaining_ap_count(value):
 	else:
 		PlayerStats.set_ability_2_disabled(true)
 
+func set_super_meter_count(value):
+	super_meter_count = clamp(value, 0, MAX_SUPER)
+	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super meter count is " + str(super_meter_count))
+	if value >= MAX_SUPER:
+		print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super is ready to use")
+		super_charge_timer.stop()
+	PlayerStats.set_super_meter_count(super_meter_count)
+
 func reload():
 	print(PlayerStats.get_player_data(player_id, "Player_name") + " is reloading primary weapon...")
 	reload_timer.start()
 	is_reloading = true
+
+func activate_super():
+	print(PlayerStats.get_player_data(player_id, "Player_name") + " activated super")
+	super_charge_timer.stop()
+	set_super_meter_count(0)
+	
+	if super.type == SUPER_TYPES.SPEED_UP:
+		MAX_SPEED *= 2
+		blinkAnimationPlayer.play("Start")
+	
+	super_duration_timer.wait_time = super.duration
+	super_duration_timer.start()
 
 func _on_Hurtbox_area_entered(area):
 #	print("-----------player onHurtbox entered")
@@ -209,7 +256,7 @@ func _on_Hurtbox_area_entered(area):
 #		print("match found, damage to: " + PlayerStats.get_player_data(player_id, "Player_name"))
 		#stats.health -= area.damage
 		PlayerStats.player_take_damage(player_id, 1)
-		set_name_label()
+#		set_name_label(Color(1, 0, 0))
 		hurtbox.create_hit_effect()
 		var playerHurtSound = PlayerHurtSoundScene.instance()
 		get_parent().add_child(playerHurtSound)
@@ -218,9 +265,13 @@ func _on_Hurtbox_area_entered(area):
 			area.get_parent().handle_collision()
 
 func _on_Hurtbox_invincibility_started():
+	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
+		sprite.material = white_color_material
 	blinkAnimationPlayer.play("Start")
 
 func _on_Hurtbox_invincibility_ended():
+	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
+		sprite.material = red_outline_material
 	blinkAnimationPlayer.play("Stop")
 
 func _on_PlayerStats_no_health(id):
@@ -229,6 +280,9 @@ func _on_PlayerStats_no_health(id):
 		
 func _on_GameManager_start_round(current_round):
 	start_round()
+		
+func _on_GameManager_start_round_game():
+	super_charge_timer.start()
 
 func _on_ReloadTimer_timeout():
 	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s primary weapon is reloaded")
@@ -237,3 +291,14 @@ func _on_ReloadTimer_timeout():
 
 func _on_APRegenTimer_timeout():
 	set_remaining_ap_count(remaining_ap + 1)
+
+func _on_SuperChargeTimer_timeout():
+	set_super_meter_count(super_meter_count + SUPER_CHARGE_RATE)
+
+func _on_SuperDurationTimer_timeout():
+	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super ended")
+	if super.type == SUPER_TYPES.SPEED_UP:
+		MAX_SPEED /= 2
+		blinkAnimationPlayer.play("Stop")
+	
+	super_charge_timer.start()
