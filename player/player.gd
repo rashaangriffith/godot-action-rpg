@@ -62,6 +62,8 @@ var super = {
 	"duration": 5
 }
 var super_meter_count = 0
+var last_damaged_id = 0
+var last_damager_id = 0
 
 func _ready():
 	randomize() # get a different random seed on each play
@@ -74,9 +76,12 @@ func _ready():
 	set_name_label()
 	GameManager.connect("round_started", self, "_on_GameManager_start_round")
 	GameManager.connect("round_game_started", self, "_on_GameManager_start_round_game")
+	GameManager.connect("last_damaged", self, "_on_GameManager_last_damaged")
 	set_remaining_ammo_count(remaining_ammo)
 	set_remaining_ap_count(remaining_ap)
 	follow_hud.player_id = player_id
+	
+	print("local_player_id: " + str(Server.local_player_id) + " | player_id: " + str(player_id))
 	
 	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
 		sprite.material = red_outline_material
@@ -109,7 +114,7 @@ remote func update_remote_player(data):
 		#print("state (" + Server.players[int(name)]["Player_name"] + "): " + PLAYER_STATES.keys()[state])
 		
 func set_name_label():
-	var player_name = PlayerStats.get_player_data(player_id, "Player_name")
+	var player_name = PlayerStats.get_player_name(player_id)
 	follow_hud.set_name_label(player_name, player_id)
 	
 func get_input():
@@ -192,9 +197,9 @@ func reset_player():
 	position = spawn_position
 	set_remaining_ammo_count(MAX_AMMO)
 	set_remaining_ap_count(MAX_AP)
-	set_super_meter_count(0)
+#	set_super_meter_count(0)
 	PlayerStats.reset_player(player_id)
-	super_charge_timer.stop()
+#	super_charge_timer.stop()
 	
 func die():
 	reset_player()
@@ -204,39 +209,39 @@ func start_round():
 
 func set_remaining_ammo_count(value):
 	remaining_ammo = clamp(value, 0, MAX_AMMO)
-	PlayerStats.set_ammo_count(remaining_ammo, MAX_AMMO)
+	PlayerStats.set_ammo_count(remaining_ammo, MAX_AMMO, player_id)
 
 func set_remaining_ap_count(value):
 	remaining_ap = clamp(value, 0, MAX_AP)
 	if value >= MAX_AP:
 		ap_regen_timer.stop()
-	PlayerStats.set_ap_count(remaining_ap)
+	PlayerStats.set_ap_count(remaining_ap, player_id)
 	
 	if ability_1.cost <= remaining_ap:
-		PlayerStats.set_ability_1_disabled(false)
+		PlayerStats.set_ability_1_disabled(false, player_id)
 	else:
-		PlayerStats.set_ability_1_disabled(true)
+		PlayerStats.set_ability_1_disabled(true, player_id)
 	
 	if ability_2.cost <= remaining_ap:
-		PlayerStats.set_ability_2_disabled(false)
+		PlayerStats.set_ability_2_disabled(false, player_id)
 	else:
-		PlayerStats.set_ability_2_disabled(true)
+		PlayerStats.set_ability_2_disabled(true, player_id)
 
 func set_super_meter_count(value):
 	super_meter_count = clamp(value, 0, MAX_SUPER)
-	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super meter count is " + str(super_meter_count))
+	print(PlayerStats.get_player_name(player_id) + "'s super meter count is " + str(super_meter_count))
 	if value >= MAX_SUPER:
-		print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super is ready to use")
+		print(PlayerStats.get_player_name(player_id) + "'s super is ready to use")
 		super_charge_timer.stop()
-	PlayerStats.set_super_meter_count(super_meter_count)
+	PlayerStats.set_super_meter_count(super_meter_count, player_id)
 
 func reload():
-	print(PlayerStats.get_player_data(player_id, "Player_name") + " is reloading primary weapon...")
+	print(PlayerStats.get_player_name(player_id) + " is reloading primary weapon...")
 	reload_timer.start()
 	is_reloading = true
 
 func activate_super():
-	print(PlayerStats.get_player_data(player_id, "Player_name") + " activated super")
+	print(PlayerStats.get_player_name(player_id) + " activated super")
 	super_charge_timer.stop()
 	set_super_meter_count(0)
 	
@@ -248,7 +253,7 @@ func activate_super():
 	super_duration_timer.start()
 
 func _on_Hurtbox_area_entered(area):
-#	print("-----------player onHurtbox entered")
+	print("-----------player onHurtbox entered")
 #	print("hitbox player_id: " + PlayerStats.get_player_data(area.player_id, "Player_name"))
 #	print("hurtbox player_id: " + PlayerStats.get_player_data(player_id, "Player_name"))
 	
@@ -260,6 +265,8 @@ func _on_Hurtbox_area_entered(area):
 		hurtbox.create_hit_effect()
 		var playerHurtSound = PlayerHurtSoundScene.instance()
 		get_parent().add_child(playerHurtSound)
+		last_damager_id = area.player_id
+		GameManager.set_last_damaged(area.player_id, player_id)
 		
 		if area.is_shot:
 			area.get_parent().handle_collision()
@@ -277,6 +284,9 @@ func _on_Hurtbox_invincibility_ended():
 func _on_PlayerStats_no_health(id):
 	if player_id == id:
 		die()
+		GameManager.player_killed(last_damager_id, player_id)
+	elif last_damaged_id == id:
+		GameManager.killed_player(player_id, last_damaged_id)
 		
 func _on_GameManager_start_round(current_round):
 	start_round()
@@ -285,7 +295,7 @@ func _on_GameManager_start_round_game():
 	super_charge_timer.start()
 
 func _on_ReloadTimer_timeout():
-	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s primary weapon is reloaded")
+	print(PlayerStats.get_player_name(player_id) + "'s primary weapon is reloaded")
 	set_remaining_ammo_count(MAX_AMMO)
 	is_reloading = false
 
@@ -296,9 +306,13 @@ func _on_SuperChargeTimer_timeout():
 	set_super_meter_count(super_meter_count + SUPER_CHARGE_RATE)
 
 func _on_SuperDurationTimer_timeout():
-	print(PlayerStats.get_player_data(player_id, "Player_name") + "'s super ended")
+	print(PlayerStats.get_player_name(player_id) + "'s super ended")
 	if super.type == SUPER_TYPES.SPEED_UP:
 		MAX_SPEED /= 2
 		blinkAnimationPlayer.play("Stop")
 	
 	super_charge_timer.start()
+
+func _on_GameManager_last_damaged(player, damaged):
+	if player == player_id:
+		last_damaged_id = damaged

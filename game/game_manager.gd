@@ -14,6 +14,9 @@ signal round_game_ended()
 signal post_round_started(winning_team)
 signal team_score_changed(team1, team2)
 signal match_ended(winning_team)
+signal player_killed(killer_id, killed_id)
+signal killed_player(killer_id, killed_id)
+signal last_damaged(player_id, damaged_id)
 
 const PRE_ROUND_TIME = 10
 const POST_ROUND_TIME = 5
@@ -87,3 +90,12 @@ func end_match(winning_team):
 
 func is_in_game_state():
 	return state == GAME_STATES.GAME
+
+func player_killed(killer_id, killed_id):
+	emit_signal("player_killed", killer_id, killed_id)
+	
+func killed_player(killer_id, killed_id):
+	emit_signal("killed_player", killer_id, killed_id)
+
+func set_last_damaged(player_id, damaged_id):
+	emit_signal("last_damaged", player_id, damaged_id)

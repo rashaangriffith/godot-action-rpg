@@ -12,8 +12,8 @@ func _ready():
 
 func set_name_label(name, player_id):
 	name_label.text = name
-	var my_team_color = Color(0.25, 0.88, 0.82, 1)
-	var other_team_color = Color(1, 0, 0, 1)
+	var my_team_color = PlayerStats.MY_TEAM_COLOR
+	var other_team_color = PlayerStats.OTHER_TEAM_COLOR
 	if PlayerStats.is_same_team(Server.local_player_id, player_id):
 		name_label.add_color_override("font_color", my_team_color)
 	else:

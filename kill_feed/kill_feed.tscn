@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://kill_feed/kill_feed.gd" type="Script" id=1]
+
+[node name="KillFeed" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="List" type="VBoxContainer" parent="."]
+margin_left = 264.0
+margin_right = 320.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

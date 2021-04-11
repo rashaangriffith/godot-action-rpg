@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=2]
+[gd_scene load_steps=65 format=2]
 
 [ext_resource path="res://world/gamestate.gd" type="Script" id=1]
 [ext_resource path="res://objective/objective.tscn" type="PackedScene" id=2]
@@ -11,7 +11,9 @@
 [ext_resource path="res://World Assets/CliffTileset.png" type="Texture" id=9]
 [ext_resource path="res://world/world_objects.gd" type="Script" id=10]
 [ext_resource path="res://World Assets/GrassBackground.png" type="Texture" id=11]
+[ext_resource path="res://player/player_messenger.tscn" type="PackedScene" id=12]
 [ext_resource path="res://game/game_messenger.tscn" type="PackedScene" id=13]
+[ext_resource path="res://kill_feed/kill_feed.tscn" type="PackedScene" id=14]
 
 [sub_resource type="TileSet" id=1]
 0/name = "DirtTileset.png 0"
@@ -676,6 +678,12 @@ margin_left = 107.135
 margin_top = 5.7741
 margin_right = 147.135
 margin_bottom = 45.7741
+
+[node name="PlayerMessenger" parent="CanvasLayer" instance=ExtResource( 12 )]
+
+[node name="KillFeed" parent="CanvasLayer" instance=ExtResource( 14 )]
+margin_top = 5.55791
+margin_bottom = 45.5579
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
 
 [editable path="WorldObjects/Objective"]
