@@ -12,13 +12,9 @@ func _ready():
 func _physics_process(delta):
 	position += velocity * speed * delta
 
-func _on_Hurtbox_area_entered(area):
-	pass
-	#print("-----------shot onHurtbox entered")
-	#print("area player_id: " + PlayerStats.get_player_data(area.player_id, "Player_name"))
-	#print("shot player_id: " + PlayerStats.get_player_data(player_id, "Player_name"))
-	#if not PlayerStats.is_same_team(area.player_id, player_id):
-	#	queue_free()
-
 func handle_collision():
 	queue_free()
+
+func _on_Hitbox_body_entered(body):
+#	COLLIDE WITH THE WORLD
+	handle_collision()
