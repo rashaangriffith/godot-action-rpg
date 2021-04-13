@@ -14,9 +14,9 @@ func _ready():
 	GameManager.connect("team_score_changed", self, "_on_GameManager_team_score_changed")
 
 func _on_ObjectiveState_team_percentage_changed(team, value):
-	if team == PlayerStats.TEAM1:
+	if team == Server.TEAM1:
 		team_1_percentage.text = str(value) + "%"
-	elif team == PlayerStats.TEAM2:
+	elif team == Server.TEAM2:
 		team_2_percentage.text = str(value) + "%"
 
 func _on_ObjectiveState_status_changed(value):

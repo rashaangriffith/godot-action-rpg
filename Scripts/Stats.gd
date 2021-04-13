@@ -1,7 +1,5 @@
 extends Node
 
-const TEAM1 = "1"
-const TEAM2 = "2"
 const MY_TEAM_COLOR = Color(0.25, 0.88, 0.82, 1)
 const OTHER_TEAM_COLOR = Color(1, 0, 0, 1)
 

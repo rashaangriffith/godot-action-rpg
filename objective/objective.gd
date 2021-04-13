@@ -31,8 +31,8 @@ func start_round():
 	captured_team = null
 	team_1_percentage = 0
 	team_2_percentage = 0
-	ObjectiveState.update_team_percentage(PlayerStats.TEAM1, 0)
-	ObjectiveState.update_team_percentage(PlayerStats.TEAM2, 0)
+	ObjectiveState.update_team_percentage(Server.TEAM1, 0)
+	ObjectiveState.update_team_percentage(Server.TEAM2, 0)
 	ObjectiveState.update_objective_status("open")
 	ObjectiveState.update_captured_team("")
 
@@ -42,50 +42,50 @@ func end_round(winning_team):
 	GameManager.end_round(winning_team)
 
 func update_capturers(team, number):
-	if team == PlayerStats.TEAM1:
+	if team == Server.TEAM1:
 		team_1_capturers += number
-	elif team == PlayerStats.TEAM2:
+	elif team == Server.TEAM2:
 		team_2_capturers += number
 		
 	print('capturers: team1: ' + str(team_1_capturers) + ' | team2: ' + str(team_2_capturers))
 
 func is_other_team_capturing(team):
-	if team == PlayerStats.TEAM1 && team_2_capturers > 0:
+	if team == Server.TEAM1 && team_2_capturers > 0:
 		return true
-	elif team == PlayerStats.TEAM2 && team_1_capturers > 0:
+	elif team == Server.TEAM2 && team_1_capturers > 0:
 		return true
 	
 	return false
 	
 func is_my_team_capturing(team):
-	if team == PlayerStats.TEAM1 && team_1_capturers > 0:
+	if team == Server.TEAM1 && team_1_capturers > 0:
 		return true
-	elif team == PlayerStats.TEAM2 && team_2_capturers > 0:
+	elif team == Server.TEAM2 && team_2_capturers > 0:
 		return true
 	
 	return false
 
 func has_other_team_captured(team):
-	if team == PlayerStats.TEAM1 && captured_team == PlayerStats.TEAM2:
+	if team == Server.TEAM1 && captured_team == Server.TEAM2:
 		return true
-	elif team == PlayerStats.TEAM2 && captured_team == PlayerStats.TEAM1:
+	elif team == Server.TEAM2 && captured_team == Server.TEAM1:
 		return true
 		
 	return false
 
 func has_my_team_captured(team):
-	if team == PlayerStats.TEAM1 && captured_team == PlayerStats.TEAM1:
+	if team == Server.TEAM1 && captured_team == Server.TEAM1:
 		return true
-	elif team == PlayerStats.TEAM2 && captured_team == PlayerStats.TEAM2:
+	elif team == Server.TEAM2 && captured_team == Server.TEAM2:
 		return true
 		
 	return false
 		
 func get_other_team(team):
-	if team == PlayerStats.TEAM1:
-		return PlayerStats.TEAM2
-	elif team == PlayerStats.TEAM2:
-		return PlayerStats.TEAM1
+	if team == Server.TEAM1:
+		return Server.TEAM2
+	elif team == Server.TEAM2:
+		return Server.TEAM1
 
 func _on_Objective_body_entered(body):
 	print(str(body.get_name()) + ' entered the objective')
@@ -164,32 +164,32 @@ func _on_Objective_body_exited(body):
 func _on_CapturingTimer_timeout():
 	capturing_timer.stop()
 	if team_1_capturers > 0:
-		captured_team = PlayerStats.TEAM1
+		captured_team = Server.TEAM1
 		state = OBJECTIVE_STATES.CAPTURED
 		print('objective state: team 1 has captured')
 		ObjectiveState.update_objective_status("team 1 has captured")
-		ObjectiveState.update_captured_team(PlayerStats.TEAM1)
+		ObjectiveState.update_captured_team(Server.TEAM1)
 	elif team_2_capturers > 0:
-		captured_team = PlayerStats.TEAM2
+		captured_team = Server.TEAM2
 		state = OBJECTIVE_STATES.CAPTURED
 		print('objective state: team 2 has captured')
 		ObjectiveState.update_objective_status("team 2 has captured")
-		ObjectiveState.update_captured_team(PlayerStats.TEAM2)
+		ObjectiveState.update_captured_team(Server.TEAM2)
 	captured_timer.start()
 
 func _on_CapturedTimer_timeout():
-	if captured_team == PlayerStats.TEAM1:
+	if captured_team == Server.TEAM1:
 		team_1_percentage += 1
-		ObjectiveState.update_team_percentage(PlayerStats.TEAM1, team_1_percentage)
+		ObjectiveState.update_team_percentage(Server.TEAM1, team_1_percentage)
 		if (team_1_percentage == WINNING_CAPTURE_PERCENTAGE):
 			GameManager.add_to_score(1, 0)
-			end_round(PlayerStats.TEAM1)
-	elif captured_team == PlayerStats.TEAM2:
+			end_round(Server.TEAM1)
+	elif captured_team == Server.TEAM2:
 		team_2_percentage += 1
-		ObjectiveState.update_team_percentage(PlayerStats.TEAM2, team_2_percentage)
+		ObjectiveState.update_team_percentage(Server.TEAM2, team_2_percentage)
 		if (team_2_percentage == WINNING_CAPTURE_PERCENTAGE):
 			GameManager.add_to_score(0, 1)
-			end_round(PlayerStats.TEAM2)
+			end_round(Server.TEAM2)
 	
 #	print('score - team1: ' + str(team_1_percentage) + " | team2: " + str(team_2_percentage))
 

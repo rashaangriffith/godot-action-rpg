@@ -71,9 +71,9 @@ func add_to_score(team1, team2):
 func end_round(winning_team):
 	emit_signal("round_game_ended")
 	if team_1_score == WINNING_SCORE:
-		end_match(PlayerStats.TEAM1)
+		end_match(Server.TEAM1)
 	elif team_2_score == WINNING_SCORE:
-		end_match(PlayerStats.TEAM2)
+		end_match(Server.TEAM2)
 	else:
 		state = GAME_STATES.POST_ROUND
 		print("gm state: POST_ROUND")

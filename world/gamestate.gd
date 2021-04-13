@@ -29,9 +29,9 @@ remote func spawn_player(id):
 	#player.position = player_spawn.position
 	var team = PlayerStats.get_player_data(id, "Team")
 	var player_number = PlayerStats.get_player_data(id, "Player_number")
-	if team == "1":
+	if team == Server.TEAM1:
 		player.position = team_1_spawns.get_children()[player_number - 1].position
-	elif team == "2":
+	elif team == Server.TEAM2:
 		player.position = team_2_spawns.get_children()[player_number - 2].position
 	player.spawn_position = player.position
 	print("gamestate spawn_player: " + str(Server.players[int(id)]))
