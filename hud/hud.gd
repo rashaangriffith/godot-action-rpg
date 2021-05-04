@@ -20,7 +20,7 @@ func _ready():
 #	print("local health: " + str(PlayerStats.get_player_data(Server.local_player_id, "Health")))
 	nameLabel.text = PlayerStats.get_player_data(Server.local_player_id, "Player_name")
 	PlayerStats.connect("health_changed", self, "_on_PlayerStats_health_changed")
-	PlayerStats.connect("max_health_changed", self, "set_max_hearts")
+	PlayerStats.connect("max_health_changed", self, "_on_PlayerStats_max_health_changed")
 	PlayerStats.connect("ammo_count_changed", self, "_on_PlayerStats_ammo_count_changed")
 	PlayerStats.connect("ap_count_changed", self, "_on_PlayerStats_ap_count_changed")
 	PlayerStats.connect("ability_1_disabled", self, "_on_PlayerStats_ability_1_disabled")
@@ -40,6 +40,10 @@ func set_max_hearts(value):
 	hearts = min(hearts, max_hearts)
 	if (heartUIEmpty != null):
 		heartUIEmpty.rect_size.x = max_hearts * 15
+
+func _on_PlayerStats_max_health_changed(value, player_id):
+	if player_id == Server.local_player_id:
+		set_max_hearts(value)
 
 func _on_PlayerStats_health_changed(value, player_id):
 	if player_id == Server.local_player_id:

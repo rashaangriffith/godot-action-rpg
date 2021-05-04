@@ -685,8 +685,8 @@ margin_bottom = 45.7741
 [node name="KillFeed" parent="CanvasLayer" instance=ExtResource( 14 )]
 margin_top = 5.55791
 margin_bottom = 45.5579
+
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
 
 [editable path="WorldObjects/Objective"]
-
 [editable path="CanvasLayer/GameMessenger"]

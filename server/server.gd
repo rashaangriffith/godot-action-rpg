@@ -2,6 +2,7 @@ extends Node
 
 signal connection_status_changed(message)
 
+#const DEFAULT_IP: String = "34.75.90.9"
 const DEFAULT_IP: String = "127.0.0.1"
 const DEFAULT_PORT: int = 9000
 const TEAM1: int = 1

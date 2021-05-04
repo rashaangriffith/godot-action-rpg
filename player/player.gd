@@ -30,6 +30,7 @@ onready var ap_regen_timer = $APRegenTimer
 onready var super_charge_timer = $SuperChargeTimer
 onready var super_duration_timer = $SuperDurationTimer
 onready var sprite = $Sprite
+onready var weapon_sprite = $WeaponSprite
 
 export var MAX_SPEED = 80
 export var ACCELERATION = 500
@@ -47,6 +48,7 @@ var state = PLAYER_STATES.MOVE
 var roll_vector = Vector2.DOWN
 var stats = PlayerStats
 var input_vector = Vector2.ZERO
+var look_vector = Vector2.ZERO
 var spawn_position = Vector2.ZERO
 var remaining_ammo = MAX_AMMO
 var is_reloading = false
@@ -94,7 +96,8 @@ func _physics_process(delta):
 		var data = {
 			"transform": global_transform,
 			"state": state,
-			"input": input_vector
+			"input": input_vector,
+			"look": look_vector
 		}
 		rpc_unreliable_id(1, "update_player", data)
 		
@@ -111,6 +114,7 @@ remote func update_remote_player(data):
 		global_transform = data.transform
 		state = data.state
 		input_vector = data.input
+		look_vector = data.look
 		#print("state (" + Server.players[int(name)]["Player_name"] + "): " + PLAYER_STATES.keys()[state])
 		
 func set_name_label():
@@ -118,9 +122,15 @@ func set_name_label():
 	follow_hud.set_name_label(player_name, player_id)
 	
 func get_input():
+#	get move vector
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 	input_vector = input_vector.normalized()
+	
+#	get look vector
+	look_vector = get_global_mouse_position() - global_position
+	look_vector = look_vector.normalized()
+	weapon_sprite.global_rotation = atan2(look_vector.y, look_vector.x)
 	
 	if Input.is_action_just_pressed("primary_attack"):
 #		print("input attack: shoot")
@@ -131,7 +141,7 @@ func get_input():
 			
 		if remaining_ammo > 0:
 			var world_objects = get_parent().get_parent()
-			world_objects._on_Player_shoot(ShotScene, position, roll_vector, player_id)
+			world_objects._on_Player_shoot(ShotScene, position, look_vector, player_id)
 			set_remaining_ammo_count(remaining_ammo - 1)
 		else:
 			reload()
@@ -158,15 +168,16 @@ func get_input():
 			activate_super()
 	
 func move_state(delta):
-	if (input_vector != Vector2.ZERO):
-		roll_vector = input_vector
-		swordHitbox.knockback_vector = input_vector
-		
+	roll_vector = look_vector
+	swordHitbox.knockback_vector = look_vector
+	
+	animationTree.set("parameters/Idle/blend_position", look_vector)
+	animationTree.set("parameters/Run/blend_position", look_vector)
+	animationTree.set("parameters/Attack/blend_position", look_vector)
+	animationTree.set("parameters/Roll/blend_position", look_vector)
+	
+	if input_vector != Vector2.ZERO:	
 		velocity = velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * delta)
-		animationTree.set("parameters/Idle/blend_position", input_vector)
-		animationTree.set("parameters/Run/blend_position", input_vector)
-		animationTree.set("parameters/Attack/blend_position", input_vector)
-		animationTree.set("parameters/Roll/blend_position", input_vector)
 		animationState.travel("Run")
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * delta)

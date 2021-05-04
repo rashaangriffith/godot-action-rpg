@@ -4,7 +4,7 @@ const ShotScene = preload("res://Scenes/Shot.tscn")
 
 func _on_Player_shoot(shotScene, location, direction, player_id):
 	var shot = shotScene.instance()
-	shot.speed = 200
+	shot.speed = 300
 	shot.position = location
 	shot.velocity = direction
 	shot.player_id = player_id
@@ -16,7 +16,7 @@ func _on_Player_shoot(shotScene, location, direction, player_id):
 remote func remote_spawn_shot(data):
 	if not Server.local_player_id == data.player_id:
 		var shot = ShotScene.instance()
-		shot.speed = 200
+		shot.speed = 300
 		shot.position = data.location
 		shot.velocity = data.direction
 		shot.player_id = data.player_id

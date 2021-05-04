@@ -3,7 +3,7 @@ extends Area2D
 onready var sprite = $Sprite
 onready var hitbox = $Hitbox
 
-var speed: float = 200
+var speed: float = 300
 var velocity: Vector2 = Vector2.ZERO
 var player_id = 0
 

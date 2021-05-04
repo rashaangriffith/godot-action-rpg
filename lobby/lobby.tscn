@@ -99,6 +99,7 @@ items = [ "Player 1", null, false, "Player 2", null, false, "Player 3", null, fa
 
 [node name="ItemList" parent="WaitingRoom/CenterContainer/VBoxContainer/HBoxContainer/Team2" index="1"]
 items = [ "Player 1", null, false, "Player 2", null, false, "Player 3", null, false, "Player 4", null, false ]
+
 [connection signal="text_changed" from="CenterContainer/VBoxContainer/GridContainer/NameTextBox" to="." method="_on_NameTextBox_text_changed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/JoinButton" to="." method="_on_JoinButton_pressed"]
 [connection signal="pressed" from="WaitingRoom/CenterContainer/VBoxContainer/ReadyButton" to="." method="_on_ReadyButton_pressed"]

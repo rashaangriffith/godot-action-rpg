@@ -5,7 +5,7 @@ const OTHER_TEAM_COLOR = Color(1, 0, 0, 1)
 
 signal no_health
 signal health_changed(value, player_id)
-signal max_health_changed(value)
+signal max_health_changed(value, player_id)
 signal ammo_count_changed(remaining, maximum)
 signal ap_count_changed(remaining, maximum)
 signal ability_1_disabled(value)
@@ -18,16 +18,16 @@ signal super_meter_count_changed(value)
 func set_player_max_health(player_id, value):
 	Server.players[int(player_id)]["MaxHealth"] = value
 	Server.players[int(player_id)]["Health"] = value
-	if player_id == Server.local_player_id:
-		emit_signal("max_health_changed", value, player_id)
-		emit_signal("health_changed", value)
+#	if player_id == Server.local_player_id:
+	emit_signal("max_health_changed", value, player_id)
+	emit_signal("health_changed", value, player_id)
 
 func set_player_health(player_id, value):
 	var max_health = Server.players[int(player_id)]["MaxHealth"]
 	var health = min(value, max_health)
 	Server.players[int(player_id)]["Health"] = value
-	if player_id == Server.local_player_id:
-		emit_signal("health_changed", health, player_id)
+#	if player_id == Server.local_player_id:
+	emit_signal("health_changed", health, player_id)
 	if health <= 0:
 		emit_signal("no_health", player_id)
 
