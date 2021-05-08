@@ -92,9 +92,6 @@ func _ready():
 	
 	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
 		sprite.material = red_outline_material
-		
-	if Server.local_player_id != player_id:
-		weapon_sprite.visible = false
 
 func _physics_process(delta):
 	if is_network_master():
@@ -128,6 +125,7 @@ remote func update_remote_player(data):
 		state = data.state
 		input_vector = data.input
 		look_vector = data.look
+		weapon_sprite.global_rotation = atan2(look_vector.y, look_vector.x)
 		#print("state (" + Server.players[int(name)]["Player_name"] + "): " + PLAYER_STATES.keys()[state])
 		
 func set_name_label():
