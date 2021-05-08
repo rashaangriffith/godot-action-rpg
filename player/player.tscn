@@ -981,7 +981,6 @@ parameters/Run/blend_position = Vector2( -0.00100505, 0.0517242 )
 
 [node name="HitboxPivot" type="Position2D" parent="."]
 position = Vector2( 0, -4 )
-rotation = 3.14159
 
 [node name="SwordHitbox" parent="HitboxPivot" instance=ExtResource( 3 )]
 position = Vector2( 15, 0 )
@@ -1000,7 +999,7 @@ position = Vector2( 0, -5 )
 shape = SubResource( 85 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 7 )
+stream = ExtResource( 8 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 smoothing_enabled = true

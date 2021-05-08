@@ -16,7 +16,7 @@ func set_is_invincible(value):
 	else:
 		emit_signal("invincibility_ended")
 
-func start_invincibility(duration):
+func start_invincibility(duration = 0.8):
 	timer.start(duration)
 	self.is_invincible = true
 
@@ -28,7 +28,7 @@ func create_hit_effect():
 	get_parent().add_child(hitEffect)
 	hitEffect.global_position = global_position
 	hitEffect.offset = hitEffectOffset
-	start_invincibility(0.8)
+	start_invincibility()
 
 func _on_Timer_timeout():
 	self.is_invincible = false

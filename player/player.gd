@@ -73,7 +73,7 @@ func _ready():
 	randomize() # get a different random seed on each play
 	animationTree.active = true
 	swordHitbox.player_id = player_id
-	swordHitbox.knockback_vector = roll_vector
+	swordHitbox.knockback_vector = look_vector
 	PlayerStats.set_player_max_health(player_id, MAX_HEALTH)
 	stats.connect("no_health", self, "_on_PlayerStats_no_health")
 	#name_label.set_as_toplevel(true)
@@ -158,6 +158,7 @@ func get_input():
 #		print("input ability_2: roll")
 		if remaining_ap >= ability_2.cost:
 			state = PLAYER_STATES.ROLL
+			hurtbox.start_invincibility()
 			set_remaining_ap_count(remaining_ap - ability_2.cost)
 			if ap_regen_timer.is_stopped():
 				ap_regen_timer.start()
@@ -170,7 +171,7 @@ func get_input():
 			activate_super()
 	
 func move_state(delta):
-	roll_vector = look_vector
+	roll_vector = input_vector
 	swordHitbox.knockback_vector = look_vector
 	
 	animationTree.set("parameters/Idle/blend_position", look_vector)
