@@ -49,6 +49,9 @@ var roll_vector = Vector2.DOWN
 var stats = PlayerStats
 var input_vector = Vector2.ZERO
 var look_vector = Vector2.ZERO
+var knockback_vector = Vector2.ZERO
+var knockback_velocity = 150
+var knockback_friction = 300
 var spawn_position = Vector2.ZERO
 var remaining_ammo = MAX_AMMO
 var is_reloading = false
@@ -89,6 +92,9 @@ func _ready():
 	
 	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
 		sprite.material = red_outline_material
+		
+	if Server.local_player_id != player_id:
+		weapon_sprite.visible = false
 
 func _physics_process(delta):
 	if is_network_master():
@@ -110,6 +116,11 @@ func _physics_process(delta):
 			attack_state(delta)
 		PLAYER_STATES.ROLL:
 			roll_state(delta)
+	
+	# handle knockback
+	if knockback_vector != Vector2.ZERO:
+		knockback_vector = knockback_vector.move_toward(Vector2.ZERO, knockback_friction * delta)
+		knockback_vector = move_and_slide(knockback_vector)
 
 remote func update_remote_player(data):
 	if not is_network_master():
@@ -288,6 +299,8 @@ func _on_Hurtbox_area_entered(area):
 		
 		if area.is_shot:
 			area.get_parent().handle_collision()
+		
+		knockback_vector = area.knockback_vector * knockback_velocity
 
 func _on_Hurtbox_invincibility_started():
 	if not PlayerStats.is_same_team(Server.local_player_id, player_id):
