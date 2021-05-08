@@ -1,0 +1,176 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://fonts/bit_font_8.tres" type="DynamicFont" id=1]
+[ext_resource path="res://status_screen/status_screen.gd" type="Script" id=2]
+
+[node name="StatusScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.686275 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+margin_left = 58.0
+margin_top = 15.0
+margin_right = 262.0
+margin_bottom = 164.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Teams" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+margin_right = 204.0
+margin_bottom = 101.0
+alignment = 1
+
+[node name="Team1" type="VBoxContainer" parent="CenterContainer/VBoxContainer/Teams"]
+margin_right = 100.0
+margin_bottom = 101.0
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Teams/Team1"]
+margin_right = 100.0
+margin_bottom = 8.0
+custom_fonts/font = ExtResource( 1 )
+text = "TEAM 1"
+align = 1
+valign = 1
+
+[node name="Team1List" type="ItemList" parent="CenterContainer/VBoxContainer/Teams/Team1"]
+margin_top = 12.0
+margin_right = 100.0
+margin_bottom = 101.0
+rect_min_size = Vector2( 100, 0 )
+items = [ "Player 1", null, false, "Player 2", null, false, "Player 3", null, false, "Player 4", null, false ]
+auto_height = true
+same_column_width = true
+fixed_column_width = 100
+icon_mode = 0
+
+[node name="Team2" type="VBoxContainer" parent="CenterContainer/VBoxContainer/Teams"]
+margin_left = 104.0
+margin_right = 204.0
+margin_bottom = 101.0
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Teams/Team2"]
+margin_right = 100.0
+margin_bottom = 8.0
+custom_fonts/font = ExtResource( 1 )
+text = "TEAM 1"
+align = 1
+valign = 1
+
+[node name="Team2List" type="ItemList" parent="CenterContainer/VBoxContainer/Teams/Team2"]
+margin_top = 12.0
+margin_right = 100.0
+margin_bottom = 101.0
+rect_min_size = Vector2( 100, 0 )
+items = [ "Player 1", null, false, "Player 2", null, false, "Player 3", null, false, "Player 4", null, false ]
+auto_height = true
+same_column_width = true
+fixed_column_width = 100
+icon_mode = 0
+
+[node name="Info" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+margin_top = 105.0
+margin_right = 204.0
+margin_bottom = 149.0
+alignment = 1
+
+[node name="PlayerStats" type="VBoxContainer" parent="CenterContainer/VBoxContainer/Info"]
+margin_right = 100.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="PlayerName" type="Label" parent="CenterContainer/VBoxContainer/Info/PlayerStats"]
+margin_top = 6.0
+margin_right = 100.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 1 )
+text = "Player name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Kills" type="Label" parent="CenterContainer/VBoxContainer/Info/PlayerStats"]
+margin_top = 18.0
+margin_right = 100.0
+margin_bottom = 26.0
+custom_fonts/font = ExtResource( 1 )
+text = "Kills: 100"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Deaths" type="Label" parent="CenterContainer/VBoxContainer/Info/PlayerStats"]
+margin_top = 30.0
+margin_right = 100.0
+margin_bottom = 38.0
+custom_fonts/font = ExtResource( 1 )
+text = "Deaths: 100"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Controls" type="VBoxContainer" parent="CenterContainer/VBoxContainer/Info"]
+margin_left = 104.0
+margin_right = 204.0
+margin_bottom = 44.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Label3" type="Label" parent="CenterContainer/VBoxContainer/Info/Controls"]
+margin_right = 100.0
+margin_bottom = 8.0
+custom_fonts/font = ExtResource( 1 )
+text = "Shoot: Mouse 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="CenterContainer/VBoxContainer/Info/Controls"]
+margin_top = 12.0
+margin_right = 100.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 1 )
+text = "Sword: E"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="CenterContainer/VBoxContainer/Info/Controls"]
+margin_top = 24.0
+margin_right = 100.0
+margin_bottom = 32.0
+custom_fonts/font = ExtResource( 1 )
+text = "Roll: SHIFT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label5" type="Label" parent="CenterContainer/VBoxContainer/Info/Controls"]
+margin_top = 36.0
+margin_right = 100.0
+margin_bottom = 44.0
+custom_fonts/font = ExtResource( 1 )
+text = "Super: Q"
+__meta__ = {
+"_edit_use_anchors_": false
+}

@@ -66,6 +66,8 @@ var super = {
 var super_meter_count = 0
 var last_damaged_id = 0
 var last_damager_id = 0
+var kills = 0
+var deaths = 0
 
 func _ready():
 	randomize() # get a different random seed on each play
@@ -214,9 +216,13 @@ func reset_player():
 	
 func die():
 	reset_player()
+	kills += 1
+	PlayerStats.set_deaths_count(kills, player_id)
 
 func start_round():
 	reset_player()
+	kills = 0
+	deaths = 0
 
 func set_remaining_ammo_count(value):
 	remaining_ammo = clamp(value, 0, MAX_AMMO)
@@ -271,7 +277,7 @@ func _on_Hurtbox_area_entered(area):
 	if not PlayerStats.is_same_team(area.player_id, player_id):
 #		print("match found, damage to: " + PlayerStats.get_player_data(player_id, "Player_name"))
 		#stats.health -= area.damage
-		PlayerStats.player_take_damage(player_id, 1)
+		PlayerStats.player_take_damage(player_id, 1, area.player_id, kills)
 #		set_name_label(Color(1, 0, 0))
 		hurtbox.create_hit_effect()
 		var playerHurtSound = PlayerHurtSoundScene.instance()

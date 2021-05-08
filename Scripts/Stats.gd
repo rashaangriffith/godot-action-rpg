@@ -11,6 +11,8 @@ signal ap_count_changed(remaining, maximum)
 signal ability_1_disabled(value)
 signal ability_2_disabled(value)
 signal super_meter_count_changed(value)
+signal kills_count_changed(value)
+signal deaths_count_changed(value)
 
 #func _ready():
 	#self.health = max_health
@@ -31,9 +33,11 @@ func set_player_health(player_id, value):
 	if health <= 0:
 		emit_signal("no_health", player_id)
 
-func player_take_damage(player_id, value):
+func player_take_damage(player_id, value, damager_player_id, kills):
 	var new_health = Server.players[int(player_id)]["Health"] - value
 	set_player_health(player_id, new_health)
+	if new_health <= 0 and damager_player_id == Server.local_player_id:
+		set_kills_count(kills + 1, damager_player_id)
 
 func reset_player(player_id):
 	var new_health = Server.players[int(player_id)]["MaxHealth"]
@@ -70,3 +74,11 @@ func set_ability_2_disabled(value, player_id):
 func set_super_meter_count(value, player_id):
 	if player_id == Server.local_player_id:
 		emit_signal("super_meter_count_changed", value)
+
+func set_kills_count(value, player_id):
+	if player_id == Server.local_player_id:
+		emit_signal("kills_count_changed", value)
+
+func set_deaths_count(value, player_id):
+	if player_id == Server.local_player_id:
+		emit_signal("deaths_count_changed", value)
