@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://objective/objective.gd" type="Script" id=1]
+[ext_resource path="res://assets/109662__grunz__success.wav" type="AudioStream" id=2]
 
 [node name="Objective" type="Area2D"]
 script = ExtResource( 1 )
@@ -13,6 +14,10 @@ script = ExtResource( 1 )
 wait_time = 5.0
 
 [node name="CapturedTimer" type="Timer" parent="."]
+
+[node name="CapturedAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+
 [connection signal="body_entered" from="." to="." method="_on_Objective_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_Objective_body_exited"]
 [connection signal="timeout" from="CapturingTimer" to="." method="_on_CapturingTimer_timeout"]

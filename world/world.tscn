@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://world/gamestate.gd" type="Script" id=1]
 [ext_resource path="res://objective/objective.tscn" type="PackedScene" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://game/game_messenger.tscn" type="PackedScene" id=13]
 [ext_resource path="res://kill_feed/kill_feed.tscn" type="PackedScene" id=14]
 [ext_resource path="res://status_screen/status_screen.tscn" type="PackedScene" id=15]
+[ext_resource path="res://assets/ShotsFired - 8_28_16, 1.45 PM.mp3" type="AudioStream" id=16]
 
 [sub_resource type="TileSet" id=1]
 0/name = "DirtTileset.png 0"
@@ -689,6 +690,10 @@ margin_bottom = 45.5579
 
 [node name="StatusScreen" parent="CanvasLayer" instance=ExtResource( 15 )]
 visible = false
+
+[node name="BGMPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 16 )
+autoplay = true
 
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
 

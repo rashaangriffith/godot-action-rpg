@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/ShotsFired - 8_28_16, 1.45 PM.mp3-6acb5f37d51bcbea09c6fd749889db08.mp3str"
+
+[deps]
+
+source_file="res://assets/ShotsFired - 8_28_16, 1.45 PM.mp3"
+dest_files=[ "res://.import/ShotsFired - 8_28_16, 1.45 PM.mp3-6acb5f37d51bcbea09c6fd749889db08.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

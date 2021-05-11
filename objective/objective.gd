@@ -13,6 +13,7 @@ const WINNING_CAPTURE_PERCENTAGE = 10
 
 onready var capturing_timer = $CapturingTimer
 onready var captured_timer = $CapturedTimer
+onready var captured_audio_player = $CapturedAudioPlayer
 
 var state = OBJECTIVE_STATES.OPEN
 var team_1_capturers = 0
@@ -147,6 +148,7 @@ func _on_Objective_body_exited(body):
 		OBJECTIVE_STATES.CAPTURED_CONTESTING:
 			if has_other_team_captured(team) && not is_my_team_capturing(team):
 				state = OBJECTIVE_STATES.CAPTURED
+				captured_audio_player.play()
 				print('objective state: team ' + str(get_other_team(team)) + ' has still captured')
 				ObjectiveState.update_objective_status('team ' + str(get_other_team(team)) + ' has still captured')
 			elif has_my_team_captured(team) && not is_my_team_capturing(team) && is_other_team_capturing(team):
@@ -157,6 +159,7 @@ func _on_Objective_body_exited(body):
 		OBJECTIVE_STATES.FLIPPING:
 			if not is_my_team_capturing(team):
 				state = OBJECTIVE_STATES.CAPTURED
+				captured_audio_player.play()
 				print('stopped flipping: team ' + str(get_other_team(team)) + ' has still captured')
 				ObjectiveState.update_objective_status('team ' + str(get_other_team(team)) + ' has still captured')
 				capturing_timer.stop()
@@ -166,12 +169,14 @@ func _on_CapturingTimer_timeout():
 	if team_1_capturers > 0:
 		captured_team = Server.TEAM1
 		state = OBJECTIVE_STATES.CAPTURED
+		captured_audio_player.play()
 		print('objective state: team 1 has captured')
 		ObjectiveState.update_objective_status("team 1 has captured")
 		ObjectiveState.update_captured_team(Server.TEAM1)
 	elif team_2_capturers > 0:
 		captured_team = Server.TEAM2
 		state = OBJECTIVE_STATES.CAPTURED
+		captured_audio_player.play()
 		print('objective state: team 2 has captured')
 		ObjectiveState.update_objective_status("team 2 has captured")
 		ObjectiveState.update_captured_team(Server.TEAM2)

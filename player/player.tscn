@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=2]
+[gd_scene load_steps=101 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://Player Assets/Player.png" type="Texture" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://UI/HeartUIEmpty.png" type="Texture" id=12]
 [ext_resource path="res://UI/HeartUIFull.png" type="Texture" id=13]
 [ext_resource path="res://fonts/bit_font_8.tres" type="DynamicFont" id=14]
+[ext_resource path="res://assets/348270__metekavruk__oops2.ogg" type="AudioStream" id=15]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 4.0
@@ -72,7 +73,7 @@ tracks/3/keys = {
 "values": [ true, false, true ]
 }
 tracks/4/type = "audio"
-tracks/4/path = NodePath("AudioStreamPlayer")
+tracks/4/path = NodePath("DeathAudioPlayer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -139,7 +140,7 @@ tracks/3/keys = {
 "values": [ true, false, true ]
 }
 tracks/4/type = "audio"
-tracks/4/path = NodePath("AudioStreamPlayer")
+tracks/4/path = NodePath("DeathAudioPlayer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -206,7 +207,7 @@ tracks/3/keys = {
 "values": [ true, false, true ]
 }
 tracks/4/type = "audio"
-tracks/4/path = NodePath("AudioStreamPlayer")
+tracks/4/path = NodePath("DeathAudioPlayer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -273,7 +274,7 @@ tracks/3/keys = {
 "values": [ true, false, true ]
 }
 tracks/4/type = "audio"
-tracks/4/path = NodePath("AudioStreamPlayer")
+tracks/4/path = NodePath("DeathAudioPlayer")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -380,7 +381,7 @@ tracks/1/keys = {
 } ]
 }
 tracks/2/type = "audio"
-tracks/2/path = NodePath("AudioStreamPlayer")
+tracks/2/path = NodePath("DeathAudioPlayer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -423,7 +424,7 @@ tracks/1/keys = {
 } ]
 }
 tracks/2/type = "audio"
-tracks/2/path = NodePath("AudioStreamPlayer")
+tracks/2/path = NodePath("DeathAudioPlayer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -466,7 +467,7 @@ tracks/1/keys = {
 } ]
 }
 tracks/2/type = "audio"
-tracks/2/path = NodePath("AudioStreamPlayer")
+tracks/2/path = NodePath("DeathAudioPlayer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -509,7 +510,7 @@ tracks/1/keys = {
 } ]
 }
 tracks/2/type = "audio"
-tracks/2/path = NodePath("AudioStreamPlayer")
+tracks/2/path = NodePath("DeathAudioPlayer")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -998,9 +999,6 @@ collision_layer = 4
 position = Vector2( 0, -5 )
 shape = SubResource( 85 )
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 8 )
-
 [node name="Camera2D" type="Camera2D" parent="."]
 smoothing_enabled = true
 
@@ -1056,6 +1054,9 @@ wait_time = 3.0
 
 [node name="SuperDurationTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="DeathAudioPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )
 
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="invincibility_ended" from="Hurtbox" to="." method="_on_Hurtbox_invincibility_ended"]

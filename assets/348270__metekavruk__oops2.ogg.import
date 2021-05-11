@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/348270__metekavruk__oops2.ogg-6fceb8aff4ef3e0afdb8fc5bced384c6.oggstr"
+
+[deps]
+
+source_file="res://assets/348270__metekavruk__oops2.ogg"
+dest_files=[ "res://.import/348270__metekavruk__oops2.ogg-6fceb8aff4ef3e0afdb8fc5bced384c6.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

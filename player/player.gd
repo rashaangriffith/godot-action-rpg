@@ -31,6 +31,7 @@ onready var super_charge_timer = $SuperChargeTimer
 onready var super_duration_timer = $SuperDurationTimer
 onready var sprite = $Sprite
 onready var weapon_sprite = $WeaponSprite
+onready var death_audio_player = $DeathAudioPlayer
 
 export var MAX_SPEED = 80
 export var ACCELERATION = 500
@@ -228,6 +229,7 @@ func die():
 	reset_player()
 	kills += 1
 	PlayerStats.set_deaths_count(kills, player_id)
+	death_audio_player.play()
 
 func start_round():
 	reset_player()
