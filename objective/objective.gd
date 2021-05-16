@@ -9,7 +9,7 @@ enum OBJECTIVE_STATES {
 	FLIPPING,
 }
 
-const WINNING_CAPTURE_PERCENTAGE = 10
+const WINNING_CAPTURE_PERCENTAGE = 100
 
 onready var capturing_timer = $CapturingTimer
 onready var captured_timer = $CapturedTimer

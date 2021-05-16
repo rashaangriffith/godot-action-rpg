@@ -2,8 +2,8 @@ extends Node
 
 signal connection_status_changed(message)
 
-#const DEFAULT_IP: String = "34.75.90.9"
-const DEFAULT_IP: String = "127.0.0.1"
+const DEFAULT_IP: String = "34.75.90.9"
+#const DEFAULT_IP: String = "127.0.0.1"
 const DEFAULT_PORT: int = 9000
 const TEAM1: int = 1
 const TEAM2: int = 2
@@ -74,3 +74,15 @@ sync func start_game():
 	get_tree().get_root().add_child(world)
 	get_tree().get_root().get_node("Lobby").queue_free()
 	GameManager.start_round()
+
+func remove_player():
+	rpc_id(1, "remove_player")
+
+sync func restart():
+	players = {}
+	player_data = {}
+	next_player_team_number = TEAM1
+	
+	var lobby = preload("res://lobby/lobby.tscn").instance()
+	get_tree().get_root().add_child(lobby)
+	get_tree().get_root().get_node("World").queue_free()

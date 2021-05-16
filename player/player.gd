@@ -41,7 +41,7 @@ export var MAX_HEALTH = 5
 export var MAX_AMMO = 10
 export var MAX_AP = 4
 export var MAX_SUPER = 100
-export var SUPER_CHARGE_RATE = 20
+export var SUPER_CHARGE_RATE = 5
 
 var player_id = 0
 var velocity = Vector2.ZERO
@@ -282,7 +282,7 @@ func activate_super():
 	super_duration_timer.start()
 
 func _on_Hurtbox_area_entered(area):
-	print("-----------player onHurtbox entered")
+#	print("-----------player onHurtbox entered")
 #	print("hitbox player_id: " + PlayerStats.get_player_data(area.player_id, "Player_name"))
 #	print("hurtbox player_id: " + PlayerStats.get_player_data(player_id, "Player_name"))
 	

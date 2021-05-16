@@ -7,8 +7,8 @@
 [ext_resource path="res://assets/505426__humanoide9000__superhero-fanfare.wav" type="AudioStream" id=5]
 
 [node name="GameMessenger" type="Control"]
-margin_right = 40.0
-margin_bottom = 40.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -73,3 +73,20 @@ stream = ExtResource( 4 )
 
 [node name="MatchWinAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )
+
+[node name="RestartButton" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -39.3416
+margin_top = -49.9977
+margin_right = 35.6584
+margin_bottom = -28.9977
+custom_fonts/font = ExtResource( 2 )
+text = "RESTART"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="RestartButton" to="." method="_on_RestartButton_pressed"]
