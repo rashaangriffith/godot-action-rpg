@@ -11,5 +11,5 @@ dest_files=[ "res://.import/348270__metekavruk__oops2.ogg-6fceb8aff4ef3e0afdb8fc
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

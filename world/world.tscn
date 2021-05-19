@@ -693,6 +693,7 @@ visible = false
 
 [node name="BGMPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 16 )
+volume_db = -25.0
 autoplay = true
 
 [connection signal="timeout" from="WorldObjects/EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]

@@ -153,7 +153,7 @@ func get_input():
 			
 		if remaining_ammo > 0:
 			var world_objects = get_parent().get_parent()
-			world_objects._on_Player_shoot(ShotScene, position, look_vector, player_id)
+			world_objects._on_Player_shoot(ShotScene, weapon_sprite.global_position, look_vector, player_id)
 			set_remaining_ammo_count(remaining_ammo - 1)
 		else:
 			reload()
